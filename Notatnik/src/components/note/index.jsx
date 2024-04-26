@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./style.scss";
 
@@ -9,6 +9,12 @@ const Note = (props) => {
   const [text, setText] = useState(initialText || "");
   const [savedNotes, setSavedNotes] = useState(initialNotes || []);
 
+  const titleInputRef = useRef(null);
+
+  useEffect(() => {
+    titleInputRef.current.focus();
+  }, []);
+
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
   };
@@ -17,7 +23,8 @@ const Note = (props) => {
     setText(event.target.value);
   };
 
-  const handleCheckAndSave = () => {
+  const handleCheckAndSave = (event) => {
+    event.preventDefault();
     if (!title || !text) {
       console.error("Title and text are required.");
       return;
@@ -26,22 +33,26 @@ const Note = (props) => {
     setSavedNotes([...savedNotes, note]);
     setTitle("");
     setText("");
+    titleInputRef.current.focus();
   };
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Nazwij swoją notatkę..."
-        value={title}
-        onChange={handleTitleChange}
-      />
-      <textarea
-        placeholder="Napisz swoją notatkę..."
-        value={text}
-        onChange={handleContentChange}
-      />
-      <button onClick={handleCheckAndSave}>Save</button>
+      <form onSubmit={handleCheckAndSave}>
+        <input
+          type="text"
+          placeholder="Nazwij swoją notatkę..."
+          value={title}
+          onChange={handleTitleChange}
+          ref={titleInputRef}
+        />
+        <textarea
+          placeholder="Napisz swoją notatkę..."
+          value={text}
+          onChange={handleContentChange}
+        />
+        <button type="submit">Save</button>
+      </form>
       <div className="saved-notes">
         {savedNotes.map((note, index) => (
           <div key={index} className="saved-note">
