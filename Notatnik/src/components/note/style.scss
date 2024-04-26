@@ -1,0 +1,59 @@
+$primary-color: #3498db;
+$background-color: #2b2b2b;
+$button-color: #ffffff;
+$text-color: #372a2a;
+$input-background: #ffffff;
+$note-background: #ffffff;
+$hover-color: #2ecc71;
+
+body {
+  background-color: $background-color;
+  color: $text-color;
+  padding: 20px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: $input-background;
+  border: 1px solid darken($input-background, 10%);
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: $text-color;
+
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+  }
+}
+
+button {
+  background-color: $button-color;
+  color: darken($button-color, 50%);
+  border: 1px solid darken($button-color, 10%);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: $hover-color;
+    color: $button-color;
+  }
+}
+
+.saved-notes {
+  margin-top: 20px;
+}
+
+.saved-note {
+  background: $note-background;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: $text-color;
+}
