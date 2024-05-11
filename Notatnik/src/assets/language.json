@@ -1,0 +1,16 @@
+{
+  "en": {
+    "switchLanguage": "Switch Language",
+    "toggleTheme": "Toggle Theme",
+    "noteTitlePlaceholder": "Enter your note title...",
+    "noteContentPlaceholder": "Type your note...",
+    "saveButton": "Save"
+  },
+  "pl": {
+    "switchLanguage": "Zmień Język",
+    "toggleTheme": "Zmień Motyw",
+    "noteTitlePlaceholder": "Wpisz tytuł notatki...",
+    "noteContentPlaceholder": "Wpisz swoją notatkę...",
+    "saveButton": "Zapisz"
+  }
+}

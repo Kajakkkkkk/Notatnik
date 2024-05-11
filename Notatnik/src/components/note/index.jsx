@@ -1,57 +1,70 @@
-import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
-import "./style.scss";
+import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import languages from '../../assets/language.json';
+import './style.scss';
 
-const Note = (props) => {
-  const { initialTitle, initialText, initialNotes } = props;
-
-  const [title, setTitle] = useState(initialTitle || "");
-  const [text, setText] = useState(initialText || "");
-  const [savedNotes, setSavedNotes] = useState(initialNotes || []);
+const Note = ({ initialTitle = '', initialText = '', initialNotes = [] }) => {
+  const [language, setLanguage] = useState('pl');
+  const [theme, setTheme] = useState('dark');
+  const [title, setTitle] = useState(initialTitle);
+  const [text, setText] = useState(initialText);
+  const [savedNotes, setSavedNotes] = useState(initialNotes);
 
   const titleInputRef = useRef(null);
 
   useEffect(() => {
     titleInputRef.current.focus();
-  }, []);
+    document.body.className = theme;
+  }, [theme]);
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.body.className = newTheme;
   };
 
-  const handleContentChange = (event) => {
-    setText(event.target.value);
+  const toggleLanguage = () => {
+    setLanguage(prevLang => prevLang === 'en' ? 'pl' : 'en');
   };
+
+  const handleTitleChange = (event) => setTitle(event.target.value);
+  const handleTextChange = (event) => setText(event.target.value);
 
   const handleCheckAndSave = (event) => {
     event.preventDefault();
-    if (!title || !text) {
-      console.error("Title and text are required.");
+    if (!title.trim() || !text.trim()) {
+      console.error("Both title and text are required for a note.");
       return;
     }
     const note = { title, content: text };
-    setSavedNotes([...savedNotes, note]);
-    setTitle("");
-    setText("");
+    setSavedNotes(prevNotes => [...prevNotes, note]);
+    setTitle('');
+    setText('');
     titleInputRef.current.focus();
   };
 
   return (
-    <div>
-      <form onSubmit={handleCheckAndSave}>
+    <div className="note-container">
+      <div className="header">
+        <button onClick={toggleLanguage}>{languages[language].switchLanguage}</button>
+        <button onClick={toggleTheme}>{languages[language].toggleTheme}</button>
+      </div>
+      <form onSubmit={handleCheckAndSave} className="note-form">
         <input
           type="text"
-          placeholder="Nazwij swoją notatkę..."
+          className="title-input"
+          placeholder={languages[language].noteTitlePlaceholder}
           value={title}
           onChange={handleTitleChange}
           ref={titleInputRef}
         />
         <textarea
-          placeholder="Napisz swoją notatkę..."
+          className="text-input"
+          placeholder={languages[language].noteContentPlaceholder}
           value={text}
-          onChange={handleContentChange}
+          onChange={handleTextChange}
         />
-        <button type="submit">Save</button>
+        <button type="submit" className="save-button">{languages[language].saveButton}</button>
       </form>
       <div className="saved-notes">
         {savedNotes.map((note, index) => (
@@ -68,7 +81,10 @@ const Note = (props) => {
 Note.propTypes = {
   initialTitle: PropTypes.string,
   initialText: PropTypes.string,
-  initialNotes: PropTypes.array,
+  initialNotes: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired
+  })),
 };
 
 export default Note;
